@@ -1,0 +1,22 @@
+# This file is managed by ansible, do not edit directly
+---
+resources:
+  tenants:
+    ansible-test:
+      description: "The ansible-test tenant."
+      url: "https://ansible-test.softwarefactory-project.io/manage"
+      default-connection: github.com
+
+
+  projects:
+    internal:
+      tenant: ansible-test
+      description: Internal configuration project
+      source-repositories:
+        - morucci/an-sf-config:
+            zuul/config-project: True
+        - morucci/an-sf-jobs
+        - zuul-jobs:
+            connection: gerrit
+            zuul/include: [job]
+            zuul/shadow: morucci/an-sf-jobs
