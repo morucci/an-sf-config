@@ -1,4 +1,78 @@
 ---
+- job:
+    name: base
+    parent: null
+    description: The base job.
+    pre-run: playbooks/base/pre.yaml
+    post-run:
+      - playbooks/base/post.yaml
+    roles:
+      - zuul: morucci/an-sf-jobs
+      - zuul: zuul-jobs
+    timeout: 1800
+    # Set attempts to 1 until it's working well
+    attempts: 3
+    secrets:
+      - site_sflogs
+    nodeset:
+      nodes:
+        - name: container
+          label: runc-centos
+
+- semaphore:
+    name: semaphore-config-update
+    max: 1
+
+- job:
+    name: config-check
+    parent: base
+    description: Validate the config repo.
+    run: playbooks/config/check.yaml
+    post-run: playbooks/config/check-fetch-artifacts.yaml
+    secrets:
+      - service_user
+    vars:
+      zuul_log_url: "https://ansible-test.softwarefactory-project.io/logs"
+      gateway_url: "https://ansible-test.softwarefactory-project.io"
+      tenant_config: True
+      master_sf_url: https://softwarefactory-project.io
+    nodeset:
+      nodes: []
+
+- job:
+    name: config-update
+    parent: base
+    description: Deploy config repo update.
+    run: playbooks/config/update.yaml
+    secrets:
+      - site_install_server
+      - site_tenant_update
+    semaphore: semaphore-config-update
+    nodeset:
+      nodes: []
+
+- project:
+    name: morucci/an-sf-config
+    check:
+      jobs:
+        - config-check
+    gate:
+      jobs:
+        - config-check
+    post:
+      jobs:
+        - config-update
+
+
+- project:
+    name: morucci/an-sf-jobs
+    check:
+      jobs:
+        - linters
+    gate:
+      jobs:
+        - linters
+
 
 - job:
     name: wait-for-changes-ahead
