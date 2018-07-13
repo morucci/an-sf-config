@@ -1,0 +1,7 @@
+---
+resources:
+  projects:
+    demo:
+      description: A demo
+      source-repositories:
+        - morucci/an-demo-project
