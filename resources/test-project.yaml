@@ -3,5 +3,6 @@ resources:
   projects:
     demo:
       description: A demo
+      tenant: ansible-test
       source-repositories:
         - morucci/an-demo-project
