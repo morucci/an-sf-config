@@ -2,6 +2,6 @@
 resources:
   projects:
     demo:
-      description: A demo
+      description: A demo project for test
       source-repositories:
         - morucci/an-demo-project
