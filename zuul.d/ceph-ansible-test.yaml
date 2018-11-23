@@ -1,0 +1,7 @@
+- project:
+    name: TristanAlt/ceph-ansible
+    check:
+      jobs:
+        - tripleo-ceph-integration-master
+        - tripleo-ceph-integration-queens
+
