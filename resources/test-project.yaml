@@ -5,3 +5,5 @@ resources:
       description: A demo project for test
       source-repositories:
         - morucci/an-demo-project
+        - TristanAlt/tripleo-heat-template
+        - TristanAlt/ceph-ansible
